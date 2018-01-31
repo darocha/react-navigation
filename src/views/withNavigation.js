@@ -1,32 +1,17 @@
-/* @flow */
-
 import React from 'react';
+import propTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 
-import type {
-  NavigationState,
-  NavigationRoute,
-  NavigationAction,
-} from '../TypeDefinition';
-
-type Context = {
-  navigation: InjectedProps<NavigationState, NavigationAction>,
-};
-
-type InjectedProps = {
-  navigation: InjectedProps<NavigationState, NavigationAction>,
-};
-
-
-export default function withNavigation<T: *>(Component: ReactClass<T & InjectedProps>) {
-  const componentWithNavigation = (props: T, { navigation }: Context) => (
+export default function withNavigation(Component) {
+  const componentWithNavigation = (props, { navigation }) => (
     <Component {...props} navigation={navigation} />
   );
 
-  componentWithNavigation.displayName = `withNavigation(${Component.displayName || Component.name})`;
+  const displayName = Component.displayName || Component.name;
+  componentWithNavigation.displayName = `withNavigation(${displayName})`;
 
   componentWithNavigation.contextTypes = {
-    navigation: React.PropTypes.object.isRequired,
+    navigation: propTypes.object.isRequired,
   };
 
   return hoistStatics(componentWithNavigation, Component);
